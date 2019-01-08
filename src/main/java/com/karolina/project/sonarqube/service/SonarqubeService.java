@@ -51,22 +51,22 @@ public class SonarqubeService {
         for(MeasureElement measure : measures.getMeasures()) {
             switch (measure.getMetric()) {
                 case METRICS_MEASURE_LINES_OF_CODE:
-                    codeLines = new ResultValue(measure.getValue(), StatusEnum.OK); // TODO: sostituire con la logica di calcolo del valore
+                    codeLines = new ResultValue(measure.getValue(), StatusEnum.OK);
                     break;
                 case METRICS_MEASURE_COMMENTS:
-                    comments = new ResultValue(measure.getValue(), StatusEnum.OK); // TODO: sostituire con la logica di calcolo del valore
+                    comments = new ResultValue(measure.getValue(), StatusEnum.OK);
                     break;
                 case METRICS_MEASURE_DUPLICATIONS:
-                    duplications = new ResultValue(measure.getValue(), StatusEnum.OK); // TODO: sostituire con la logica di calcolo del valore
+                    duplications = new ResultValue(measure.getValue(), StatusEnum.OK);
                     break;
                 case METRICS_MEASURE_BUGS:
-                    bugs = new ResultValue(measure.getValue(), StatusEnum.OK); // TODO: sostituire con la logica di calcolo del valore
+                    bugs = new ResultValue(measure.getValue(), StatusEnum.OK);
                     break;
                 case METRICS_MEASURE_CODE_SMELLS:
-                    codeSmells = new ResultValue(measure.getValue(), StatusEnum.OK); // TODO: sostituire con la logica di calcolo del valore
+                    codeSmells = new ResultValue(measure.getValue(), StatusEnum.OK);
                     break;
                 case METRICS_MEASURE_VULNERABILITIES:
-                    vulnerabilities = new ResultValue(measure.getValue(), StatusEnum.OK); // TODO: sostituire con la logica di calcolo del valore
+                    vulnerabilities = new ResultValue(measure.getValue(), StatusEnum.OK);
                     break;
                 default:
                     logger.debug("{} metric not expected", measure.getMetric());
@@ -75,6 +75,16 @@ public class SonarqubeService {
 
         if(codeLines == null || comments == null || duplications == null || bugs == null || codeSmells == null || vulnerabilities == null)
             throw new ProjectNotFoundException("unable to find project: " + projectKey + ", some of the mandatory information are missing");
+
+        float commentPercentage = comments.getValue() / codeLines.getValue();
+        if(commentPercentage < 0.1f || commentPercentage > 0.15f)
+            comments.setStatus(StatusEnum.ERROR);
+
+        float duplicationPercentage = duplications.getValue() / codeLines.getValue();
+        if(duplicationPercentage > 0.02f)
+            duplications.setStatus(StatusEnum.ERROR);
+
+
 
         float numBlocker = 0, numCritical = 0, numMajor = 0, numMinor = 0;
 
@@ -97,15 +107,75 @@ public class SonarqubeService {
             }
         }
 
-        ResultValue blocker = new ResultValue(numBlocker, StatusEnum.OK); // TODO: sostituire con la funzione di calcolo
-        ResultValue critical = new ResultValue(numCritical, StatusEnum.OK); // TODO: sostituire con la funzione di calcolo
-        ResultValue major = new ResultValue(numMajor, StatusEnum.OK); // TODO: sostituire con la funzione di calcolo
-        ResultValue minor = new ResultValue(numMinor, StatusEnum.OK); // TODO: sostituire con la funzione di calcolo
+        ResultValue blocker = new ResultValue(numBlocker, StatusEnum.OK);
+        ResultValue critical = new ResultValue(numCritical, StatusEnum.OK);
+        ResultValue major = new ResultValue(numMajor, StatusEnum.OK);
+        ResultValue minor = new ResultValue(numMinor, StatusEnum.OK);
 
-        ResultValue finalResultCodeQuality = new ResultValue(codeLines.getValue() + comments.getValue() + duplications.getValue(), StatusEnum.OK); // TODO: sostituire con la funzione di calcolo corretta
-        ResultValue finalResultBugs = new ResultValue(bugs.getValue() + blocker.getValue() + critical.getValue() + major.getValue() + minor.getValue(), StatusEnum.OK); // TODO: sostituire con la funzione di calcolo corretta
-        ResultValue finalResultSecurity = new ResultValue(vulnerabilities.getValue(), StatusEnum.OK); // TODO: sostituire con la funzione di calcolo corretta
-        ResultValue finalResult = new ResultValue(finalResultCodeQuality.getValue() + finalResultBugs.getValue() + finalResultSecurity.getValue(), StatusEnum.OK); // TODO: sostituire con la funzione di calcolo corretta
+        int numError = 0;
+        int numWarning = 0;
+        int numOk = 0;
+
+        StatusEnum codeQualityStatus;
+        if(comments.getStatus() == StatusEnum.OK && duplications.getStatus() == StatusEnum.OK) {
+            codeQualityStatus = StatusEnum.OK;
+            numOk++;
+        }
+        else if(comments.getStatus() == StatusEnum.ERROR && duplications.getStatus() == StatusEnum.ERROR) {
+            codeQualityStatus = StatusEnum.ERROR;
+            numError++;
+        }
+        else {
+            codeQualityStatus = StatusEnum.WARNING;
+            numWarning++;
+        }
+
+        float bugsStatusComputation = blocker.getValue() + critical.getValue() * 0.7f + major.getValue() * 0.4f + minor.getValue() * 0.2f;
+        bugsStatusComputation /= codeLines.getValue();
+        StatusEnum bugsResultStatus;
+        if(bugsStatusComputation <= 0.02) {
+            bugsResultStatus = StatusEnum.OK;
+            numOk++;
+        }
+        else if(bugsStatusComputation <= 0.07) {
+            bugsResultStatus = StatusEnum.WARNING;
+            numWarning++;
+        }
+        else {
+            bugsResultStatus = StatusEnum.ERROR;
+            numError++;
+        }
+
+        StatusEnum securityStatusResult;
+        if(vulnerabilities.getValue() <= 0) {
+            securityStatusResult = StatusEnum.OK;
+            numOk++;
+        }
+        else {
+            securityStatusResult = StatusEnum.ERROR;
+            numError++;
+        }
+
+        StatusEnum finalResultStatus;
+        if(numOk == 0 && numError > 0)
+            finalResultStatus = StatusEnum.ERROR;
+        else if(numOk == 0 && numError == 0)
+            finalResultStatus = StatusEnum.WARNING;
+        else if(numOk == 1 && numError == 0)
+            finalResultStatus = StatusEnum.WARNING;
+        else if(numOk == 1 && numError > 0)
+            finalResultStatus = StatusEnum.ERROR;
+        else if(numOk == 2 && numError == 0)
+            finalResultStatus = StatusEnum.OK;
+        else if(numOk == 2 && numError > 0)
+            finalResultStatus = StatusEnum.WARNING;
+        else
+            finalResultStatus = StatusEnum.OK;
+
+        ResultValue finalResultCodeQuality = new ResultValue(0, codeQualityStatus);
+        ResultValue finalResultBugs = new ResultValue(bugsStatusComputation, bugsResultStatus);
+        ResultValue finalResultSecurity = new ResultValue(vulnerabilities.getValue(), securityStatusResult);
+        ResultValue finalResult = new ResultValue(0, finalResultStatus);
 
         return new ResultReview(
             new ResultCodeQuality(codeLines, comments, duplications, finalResultCodeQuality),

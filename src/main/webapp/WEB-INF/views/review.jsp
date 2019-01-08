@@ -13,7 +13,7 @@
         <div class="jumbotron text-center">
             <h1><a href="${pageContext.request.contextPath}/" class="btn btn-primary btn-lg"><spring:message code="label.page.review.title.back" text="Back" /></a> <spring:message code="label.page.review.title" text="Metrics" /> : ${projectKeyName}</h1>
             <h1>
-                <span class="label ${result.finalResult.status.cssClass}">${result.finalResult.value}</span>
+                <span class="label ${result.finalResult.status.cssClass}"><spring:message code="${result.finalResult.status.label}" /></span>
             </h1>
         </div>
         <div class="container">
@@ -30,7 +30,13 @@
                                     <th><spring:message code="label.page.review.title.result" text="Result" /></th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody
+                                <tr>
+                                    <td>1</td>
+                                    <td><spring:message code="label.page.review.title.codelines" text="Lines of code" /></td>
+                                    <td class="text-right"><fmt:formatNumber value="${result.codeQuality.codeLines.value}"  maxFractionDigits="0" /></td>
+                                    <td></td>
+                                </tr>
                                 <tr>
                                     <td>1</td>
                                     <td><spring:message code="label.page.review.title.comments" text="Comments" /></td>
@@ -50,7 +56,7 @@
                             </tbody>
                         </table>
                         <h3 class="text-center">
-                            <span class="label ${result.codeQuality.finalResult.status.cssClass}">${result.codeQuality.finalResult.value}</span>
+                            <span class="label ${result.codeQuality.finalResult.status.cssClass}"><spring:message code="${result.codeQuality.finalResult.status.label}" /></span>
                         </h3>
                     </div>
                 </div>
@@ -62,7 +68,6 @@
                                 <th><spring:message code="label.page.review.title.number" text="#" /></th>
                                 <th><spring:message code="label.page.review.title.measure" text="Measure" /></th>
                                 <th><spring:message code="label.page.review.title.value" text="Value" /></th>
-                                <th><spring:message code="label.page.review.title.result" text="Result" /></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -70,46 +75,31 @@
                                 <td>1</td>
                                 <td><spring:message code="label.page.review.title.bug" text="Bug" /></td>
                                 <td class="text-right"><fmt:formatNumber value="${result.bugs.bug.value}"  maxFractionDigits="0" /></td>
-                                <td>
-                                    <span class="label ${result.bugs.bug.status.cssClass}"><spring:message code="${result.bugs.bug.status.label}" /></span>
-                                </td>
                             </tr>
                             <tr>
                                 <td>2</td>
                                 <td><spring:message code="label.page.review.title.blocker" text="Blocker" /></td>
                                 <td class="text-right"><fmt:formatNumber value="${result.bugs.blocker.value}"  maxFractionDigits="0" /></td>
-                                <td>
-                                    <span class="label ${result.bugs.blocker.status.cssClass}"><spring:message code="${result.bugs.blocker.status.label}" /></span>
-                                </td>
                             </tr>
                             <tr>
                                 <td>3</td>
                                 <td><spring:message code="label.page.review.title.critical" text="Critical" /></td>
                                 <td class="text-right"><fmt:formatNumber value="${result.bugs.critical.value}"  maxFractionDigits="0" /></td>
-                                <td>
-                                    <span class="label ${result.bugs.critical.status.cssClass}"><spring:message code="${result.bugs.critical.status.label}" /></span>
-                                </td>
                             </tr>
                             <tr>
                                 <td>4</td>
                                 <td><spring:message code="label.page.review.title.major" text="Major" /></td>
                                 <td class="text-right"><fmt:formatNumber value="${result.bugs.major.value}"  maxFractionDigits="0" /></td>
-                                <td>
-                                    <span class="label ${result.bugs.major.status.cssClass}"><spring:message code="${result.bugs.major.status.label}" /></span>
-                                </td>
                             </tr>
                             <tr>
                                 <td>5</td>
                                 <td><spring:message code="label.page.review.title.minor" text="Minor" /></td>
                                 <td class="text-right"><fmt:formatNumber value="${result.bugs.minor.value}"  maxFractionDigits="0" /></td>
-                                <td>
-                                    <span class="label ${result.bugs.minor.status.cssClass}"><spring:message code="${result.bugs.minor.status.label}" /></span>
-                                </td>
                             </tr>
                         </tbody>
                     </table>
                     <h3 class="text-center">
-                        <span class="label ${result.bugs.finalResult.status.cssClass}">${result.bugs.finalResult.value}</span>
+                        <span class="label ${result.bugs.finalResult.status.cssClass}"><spring:message code="${result.bugs.finalResult.status.label}" /></span>
                     </h3>
                 </div>
                 <div class="col-sm-4">
@@ -120,7 +110,6 @@
                                 <th><spring:message code="label.page.review.title.number" text="#" /></th>
                                 <th><spring:message code="label.page.review.title.measure" text="Measure" /></th>
                                 <th><spring:message code="label.page.review.title.value" text="Value" /></th>
-                                <th><spring:message code="label.page.review.title.result" text="Result" /></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -128,14 +117,11 @@
                                 <td>1</td>
                                 <td><spring:message code="label.page.review.title.security" text="Security" /></td>
                                 <td class="text-right"><fmt:formatNumber value="${result.security.security.value}"  maxFractionDigits="0" /></td>
-                                <td>
-                                    <span class="label ${result.security.security.status.cssClass}"><spring:message code="${result.security.security.status.label}" /></span>
-                                </td>
                             </tr>
                         </tbody>
                     </table>
                     <h3 class="text-center">
-                        <span class="label ${result.security.finalResult.status.cssClass}">${result.security.finalResult.value}</span>
+                        <span class="label ${result.security.finalResult.status.cssClass}"><spring:message code="${result.security.finalResult.status.label}" /></span>
                     </h3>
                 </div>
             </div>
