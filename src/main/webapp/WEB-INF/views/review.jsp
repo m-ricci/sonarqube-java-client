@@ -1,5 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/fmt" prefix = "fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -33,7 +35,7 @@
                                 <tr>
                                     <td>1</td>
                                     <td>Komentarze</td>
-                                    <td>${result.codeQuality.comments.value}</td>
+                                    <td class="text-right"><fmt:formatNumber value="${result.codeQuality.comments.value}"  maxFractionDigits="0" /></td>
                                     <td>
                                         <span class="label ${result.codeQuality.comments.status.cssClass}"><spring:message code="${result.codeQuality.comments.status.label}" /></span>
                                     </td>
@@ -41,7 +43,7 @@
                                 <tr>
                                     <td>2</td>
                                     <td>Duplikaty</td>
-                                    <td>${result.codeQuality.duplications.value}</td>
+                                    <td class="text-right"><fmt:formatNumber value="${result.codeQuality.duplications.value}"  maxFractionDigits="0" /></td>
                                     <td>
                                         <span class="label ${result.codeQuality.duplications.status.cssClass}"><spring:message code="${result.codeQuality.duplications.status.label}" /></span>
                                     </td>
@@ -68,7 +70,7 @@
                             <tr>
                                 <td>1</td>
                                 <td>Bug</td>
-                                <td>${result.bugs.bug.value}</td>
+                                <td class="text-right"><fmt:formatNumber value="${result.bugs.bug.value}"  maxFractionDigits="0" /></td>
                                 <td>
                                     <span class="label ${result.bugs.bug.status.cssClass}"><spring:message code="${result.bugs.bug.status.label}" /></span>
                                 </td>
@@ -76,7 +78,7 @@
                             <tr>
                                 <td>2</td>
                                 <td>Blocker</td>
-                                <td>${result.bugs.blocker.value}</td>
+                                <td class="text-right"><fmt:formatNumber value="${result.bugs.blocker.value}"  maxFractionDigits="0" /></td>
                                 <td>
                                     <span class="label ${result.bugs.blocker.status.cssClass}"><spring:message code="${result.bugs.blocker.status.label}" /></span>
                                 </td>
@@ -84,7 +86,7 @@
                             <tr>
                                 <td>3</td>
                                 <td>Critical</td>
-                                <td>${result.bugs.critical.value}</td>
+                                <td class="text-right"><fmt:formatNumber value="${result.bugs.critical.value}"  maxFractionDigits="0" /></td>
                                 <td>
                                     <span class="label ${result.bugs.critical.status.cssClass}"><spring:message code="${result.bugs.critical.status.label}" /></span>
                                 </td>
@@ -92,7 +94,7 @@
                             <tr>
                                 <td>4</td>
                                 <td>Major</td>
-                                <td>${result.bugs.major.value}</td>
+                                <td class="text-right"><fmt:formatNumber value="${result.bugs.major.value}"  maxFractionDigits="0" /></td>
                                 <td>
                                     <span class="label ${result.bugs.major.status.cssClass}"><spring:message code="${result.bugs.major.status.label}" /></span>
                                 </td>
@@ -100,7 +102,7 @@
                             <tr>
                                 <td>5</td>
                                 <td>Minor</td>
-                                <td>${result.bugs.minor.value}</td>
+                                <td class="text-right"><fmt:formatNumber value="${result.bugs.minor.value}"  maxFractionDigits="0" /></td>
                                 <td>
                                     <span class="label ${result.bugs.minor.status.cssClass}"><spring:message code="${result.bugs.minor.status.label}" /></span>
                                 </td>
@@ -126,7 +128,7 @@
                             <tr>
                                 <td>1</td>
                                 <td>Bezpieczeństwo</td>
-                                <td>${result.security.security.value}</td>
+                                <td class="text-right"><fmt:formatNumber value="${result.security.security.value}"  maxFractionDigits="0" /></td>
                                 <td>
                                     <span class="label ${result.security.security.status.cssClass}"><spring:message code="${result.security.security.status.label}" /></span>
                                 </td>

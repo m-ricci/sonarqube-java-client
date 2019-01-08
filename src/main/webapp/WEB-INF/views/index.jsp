@@ -5,6 +5,9 @@
         <title>SonarQube Client</title>
     </head>
     <body>
-        index prova
+        <form action="${pageContext.request.contextPath}/review" method="post">
+            <input type="text" name="projectKey" >
+            <input type="submit" value="Submit">
+        </form>
     </body>
 </html>

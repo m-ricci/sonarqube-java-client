@@ -1,7 +1,5 @@
 package com.karolina.project.sonarqube.bean.review.result;
 
-import com.karolina.project.sonarqube.utils.StatusEnum;
-
 public class ResultReview {
 
     private ResultValue finalResult;
@@ -11,11 +9,11 @@ public class ResultReview {
 
     public ResultReview() {}
 
-    public ResultReview(ResultValue finalResult, ResultCodeQuality codeQuality, ResultBugs bugs, ResultSecurity security) {
-        this.finalResult = finalResult;
+    public ResultReview(ResultCodeQuality codeQuality, ResultBugs bugs, ResultSecurity security, ResultValue finalResult) {
         this.codeQuality = codeQuality;
         this.bugs = bugs;
         this.security = security;
+        this.finalResult = finalResult;
     }
 
     public void setFinalResult(ResultValue finalResult) {
