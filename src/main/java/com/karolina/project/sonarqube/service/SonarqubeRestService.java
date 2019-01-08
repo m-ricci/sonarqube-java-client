@@ -1,15 +1,18 @@
 package com.karolina.project.sonarqube.service;
 
 import com.karolina.project.sonarqube.bean.configuration.RestConfiguration;
+import com.karolina.project.sonarqube.exception.SonarqubeNotReachableException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.ConnectException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +41,7 @@ public class SonarqubeRestService {
         this.restConfiguration = restConfiguration;
     }
 
-    public boolean login() {
+    public boolean login() throws SonarqubeNotReachableException {
         try {
             logger.info("SonarqubeRestService::login");
             RestTemplate template = new RestTemplate();
@@ -52,13 +55,15 @@ public class SonarqubeRestService {
             ResponseEntity<String> response = template.postForEntity(resourceUrl, request, String.class);
             logger.debug("{}", response);
             return response.getStatusCode() == HttpStatus.OK;
+        } catch(ResourceAccessException e) {
+            throw new SonarqubeNotReachableException("unable to connect to sonarqube");
         } catch (RestClientException e) {
             logger.error(e.getMessage(), e);
             return false;
         }
     }
 
-    public boolean logout() {
+    public boolean logout() throws SonarqubeNotReachableException {
         try {
             logger.info("SonarqubeRestService::logout");
             RestTemplate template = new RestTemplate();
@@ -70,13 +75,15 @@ public class SonarqubeRestService {
             ResponseEntity<String> response = template.postForEntity(resourceUrl, request, String.class);
             logger.debug("{}", response);
             return response.getStatusCode() == HttpStatus.OK;
+        } catch(ResourceAccessException e) {
+            throw new SonarqubeNotReachableException("unable to connect to sonarqube");
         } catch (RestClientException e) {
             logger.error(e.getMessage(), e);
             return false;
         }
     }
 
-    public ResponseEntity<String> getComponent(String projectKey) {
+    public ResponseEntity<String> getComponent(String projectKey) throws SonarqubeNotReachableException {
         try {
             logger.info("SonarqubeRestService::getComponent");
             RestTemplate template = new RestTemplate();
@@ -88,13 +95,15 @@ public class SonarqubeRestService {
             ResponseEntity<String> response = template.getForEntity(resourceUrl, String.class, map);
             logger.debug("{}", response);
             return response;
+        } catch(ResourceAccessException e) {
+            throw new SonarqubeNotReachableException("unable to connect to sonarqube");
         } catch (RestClientException e) {
             logger.error(e.getMessage(), e);
             return null;
         }
     }
 
-    public ResponseEntity<String> getMetrics(String projectKey, String... metrics) {
+    public ResponseEntity<String> getMetrics(String projectKey, String... metrics) throws SonarqubeNotReachableException {
         try {
             logger.info("SonarqubeRestService::getCodeQuality");
             RestTemplate template = new RestTemplate();
@@ -107,13 +116,15 @@ public class SonarqubeRestService {
             ResponseEntity<String> response = template.getForEntity(resourceUrl, String.class, map);
             logger.debug("{}", response);
             return response;
+        } catch(ResourceAccessException e) {
+            throw new SonarqubeNotReachableException("unable to connect to sonarqube");
         } catch (RestClientException e) {
             logger.error(e.getMessage(), e);
             return null;
         }
     }
 
-    public ResponseEntity<String> getIssues(String projectKey) {
+    public ResponseEntity<String> getIssues(String projectKey) throws SonarqubeNotReachableException {
         try {
             logger.info("SonarqubeRestService::getIssues");
             RestTemplate template = new RestTemplate();
@@ -125,6 +136,8 @@ public class SonarqubeRestService {
             ResponseEntity<String> response = template.getForEntity(resourceUrl, String.class, map);
             logger.debug("{}", response);
             return response;
+        } catch(ResourceAccessException e) {
+            throw new SonarqubeNotReachableException("unable to connect to sonarqube");
         } catch (RestClientException e) {
             logger.error(e.getMessage(), e);
             return null;

@@ -7,8 +7,6 @@ public class ResultReview {
     private ResultBugs bugs;
     private ResultSecurity security;
 
-    public ResultReview() {}
-
     public ResultReview(ResultCodeQuality codeQuality, ResultBugs bugs, ResultSecurity security, ResultValue finalResult) {
         this.codeQuality = codeQuality;
         this.bugs = bugs;

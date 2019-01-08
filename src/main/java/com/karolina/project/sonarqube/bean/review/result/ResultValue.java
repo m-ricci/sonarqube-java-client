@@ -7,8 +7,6 @@ public class ResultValue {
     private float value;
     private StatusEnum status;
 
-    public ResultValue() {}
-
     public ResultValue(float value, StatusEnum status) {
         this.value = value;
         this.status = status;

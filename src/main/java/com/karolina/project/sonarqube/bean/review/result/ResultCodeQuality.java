@@ -7,8 +7,6 @@ public class ResultCodeQuality {
     private ResultValue duplications;
     private ResultValue finalResult;
 
-    public ResultCodeQuality() {}
-
     public ResultCodeQuality(ResultValue codeLines, ResultValue comments, ResultValue duplications, ResultValue finalResult) {
         this.codeLines = codeLines;
         this.comments = comments;

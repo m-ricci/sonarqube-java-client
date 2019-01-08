@@ -9,8 +9,6 @@ public class ResultBugs {
     private ResultValue minor;
     private ResultValue finalResult;
 
-    public ResultBugs() {}
-
     public ResultBugs(ResultValue bug, ResultValue blocker, ResultValue critical, ResultValue major, ResultValue minor, ResultValue finalResult) {
         this.bug = bug;
         this.blocker = blocker;

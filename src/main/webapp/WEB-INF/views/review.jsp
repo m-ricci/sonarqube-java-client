@@ -5,14 +5,13 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Bootstrap Example</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>SonarQube Client</title>
         <link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     </head>
     <body>
         <div class="jumbotron text-center">
-            <h1>Metryki</h1>
+            <h1><a href="${pageContext.request.contextPath}/" class="btn btn-primary btn-lg"><spring:message code="label.page.review.title.back" text="Back" /></a> <spring:message code="label.page.review.title" text="Metrics" /> : ${projectKeyName}</h1>
             <h1>
                 <span class="label ${result.finalResult.status.cssClass}">${result.finalResult.value}</span>
             </h1>
@@ -20,21 +19,21 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-4">
-                    <h3>Jakość kodu</h3>
+                    <h3><spring:message code="label.page.review.title.codeQuality" text="Code Quality" /></h3>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>Metryka</th>
-                                    <th>Wynik</th>
-                                    <th>Ocena</th>
+                                    <th><spring:message code="label.page.review.title.number" text="#" /></th>
+                                    <th><spring:message code="label.page.review.title.measure" text="Measure" /></th>
+                                    <th><spring:message code="label.page.review.title.value" text="Value" /></th>
+                                    <th><spring:message code="label.page.review.title.result" text="Result" /></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td>1</td>
-                                    <td>Komentarze</td>
+                                    <td><spring:message code="label.page.review.title.comments" text="Comments" /></td>
                                     <td class="text-right"><fmt:formatNumber value="${result.codeQuality.comments.value}"  maxFractionDigits="0" /></td>
                                     <td>
                                         <span class="label ${result.codeQuality.comments.status.cssClass}"><spring:message code="${result.codeQuality.comments.status.label}" /></span>
@@ -42,7 +41,7 @@
                                 </tr>
                                 <tr>
                                     <td>2</td>
-                                    <td>Duplikaty</td>
+                                    <td><spring:message code="label.page.review.title.duplications" text="Duplications" /></td>
                                     <td class="text-right"><fmt:formatNumber value="${result.codeQuality.duplications.value}"  maxFractionDigits="0" /></td>
                                     <td>
                                         <span class="label ${result.codeQuality.duplications.status.cssClass}"><spring:message code="${result.codeQuality.duplications.status.label}" /></span>
@@ -56,20 +55,20 @@
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <h3>Błędy</h3>
+                    <h3><spring:message code="label.page.review.title.problems" text="Problems" /></h3>
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Metryka</th>
-                                <th>Wynik</th>
-                                <th>Ocena</th>
+                                <th><spring:message code="label.page.review.title.number" text="#" /></th>
+                                <th><spring:message code="label.page.review.title.measure" text="Measure" /></th>
+                                <th><spring:message code="label.page.review.title.value" text="Value" /></th>
+                                <th><spring:message code="label.page.review.title.result" text="Result" /></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>1</td>
-                                <td>Bug</td>
+                                <td><spring:message code="label.page.review.title.bug" text="Bug" /></td>
                                 <td class="text-right"><fmt:formatNumber value="${result.bugs.bug.value}"  maxFractionDigits="0" /></td>
                                 <td>
                                     <span class="label ${result.bugs.bug.status.cssClass}"><spring:message code="${result.bugs.bug.status.label}" /></span>
@@ -77,7 +76,7 @@
                             </tr>
                             <tr>
                                 <td>2</td>
-                                <td>Blocker</td>
+                                <td><spring:message code="label.page.review.title.blocker" text="Blocker" /></td>
                                 <td class="text-right"><fmt:formatNumber value="${result.bugs.blocker.value}"  maxFractionDigits="0" /></td>
                                 <td>
                                     <span class="label ${result.bugs.blocker.status.cssClass}"><spring:message code="${result.bugs.blocker.status.label}" /></span>
@@ -85,7 +84,7 @@
                             </tr>
                             <tr>
                                 <td>3</td>
-                                <td>Critical</td>
+                                <td><spring:message code="label.page.review.title.critical" text="Critical" /></td>
                                 <td class="text-right"><fmt:formatNumber value="${result.bugs.critical.value}"  maxFractionDigits="0" /></td>
                                 <td>
                                     <span class="label ${result.bugs.critical.status.cssClass}"><spring:message code="${result.bugs.critical.status.label}" /></span>
@@ -93,7 +92,7 @@
                             </tr>
                             <tr>
                                 <td>4</td>
-                                <td>Major</td>
+                                <td><spring:message code="label.page.review.title.major" text="Major" /></td>
                                 <td class="text-right"><fmt:formatNumber value="${result.bugs.major.value}"  maxFractionDigits="0" /></td>
                                 <td>
                                     <span class="label ${result.bugs.major.status.cssClass}"><spring:message code="${result.bugs.major.status.label}" /></span>
@@ -101,7 +100,7 @@
                             </tr>
                             <tr>
                                 <td>5</td>
-                                <td>Minor</td>
+                                <td><spring:message code="label.page.review.title.minor" text="Minor" /></td>
                                 <td class="text-right"><fmt:formatNumber value="${result.bugs.minor.value}"  maxFractionDigits="0" /></td>
                                 <td>
                                     <span class="label ${result.bugs.minor.status.cssClass}"><spring:message code="${result.bugs.minor.status.label}" /></span>
@@ -114,20 +113,20 @@
                     </h3>
                 </div>
                 <div class="col-sm-4">
-                    <h3>Bezpieczeństwo</h3>
+                    <h3><spring:message code="label.page.review.title.security" text="Security" /></h3>
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Metryka</th>
-                                <th>Wynik</th>
-                                <th>Ocena</th>
+                                <th><spring:message code="label.page.review.title.number" text="#" /></th>
+                                <th><spring:message code="label.page.review.title.measure" text="Measure" /></th>
+                                <th><spring:message code="label.page.review.title.value" text="Value" /></th>
+                                <th><spring:message code="label.page.review.title.result" text="Result" /></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>1</td>
-                                <td>Bezpieczeństwo</td>
+                                <td><spring:message code="label.page.review.title.security" text="Security" /></td>
                                 <td class="text-right"><fmt:formatNumber value="${result.security.security.value}"  maxFractionDigits="0" /></td>
                                 <td>
                                     <span class="label ${result.security.security.status.cssClass}"><spring:message code="${result.security.security.status.label}" /></span>

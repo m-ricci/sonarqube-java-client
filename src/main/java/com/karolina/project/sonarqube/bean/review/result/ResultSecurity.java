@@ -5,8 +5,6 @@ public class ResultSecurity {
     private ResultValue security;
     private ResultValue finalResult;
 
-    public ResultSecurity() {}
-
     public ResultSecurity(ResultValue security, ResultValue finalResult) {
         this.security = security;
         this.finalResult = finalResult;

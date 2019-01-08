@@ -5,6 +5,8 @@ import com.karolina.project.sonarqube.bean.sonarqube.response.IssueElement;
 import com.karolina.project.sonarqube.bean.sonarqube.response.MeasureElement;
 import com.karolina.project.sonarqube.bean.sonarqube.response.ResponseIssues;
 import com.karolina.project.sonarqube.bean.sonarqube.response.ResponseMeasures;
+import com.karolina.project.sonarqube.exception.ProjectNotFoundException;
+import com.karolina.project.sonarqube.exception.SonarqubeNotReachableException;
 import com.karolina.project.sonarqube.utils.ResponseConverter;
 import com.karolina.project.sonarqube.utils.StatusEnum;
 import org.slf4j.Logger;
@@ -26,23 +28,23 @@ public class SonarqubeService {
         this.sonarqubeRestService = sonarqubeRestService;
     }
 
-    public ResultReview getReview(String projectKey) {
+    public ResultReview getReview(String projectKey) throws SonarqubeNotReachableException, ProjectNotFoundException {
 
         if(sonarqubeRestService.getComponent(projectKey) == null)
-            return null;
+            throw new ProjectNotFoundException("unable to find project: " + projectKey);
 
         ResponseEntity<String> metricsResponse = sonarqubeRestService.getMetrics(projectKey, METRICS_MEASURE_LINES_OF_CODE, METRICS_MEASURE_COMMENTS, METRICS_MEASURE_DUPLICATIONS, METRICS_MEASURE_BUGS, METRICS_MEASURE_VULNERABILITIES, METRICS_MEASURE_CODE_SMELLS);
         ResponseEntity<String> issuesResponse = sonarqubeRestService.getIssues(projectKey);
 
         if(metricsResponse == null || metricsResponse.getStatusCode() != HttpStatus.OK || metricsResponse.getBody() == null
                 || issuesResponse == null || issuesResponse.getStatusCode() != HttpStatus.OK || issuesResponse.getBody() == null)
-            return null;
+            throw new ProjectNotFoundException("unable to find project: " + projectKey + ", missing metrics or issues");
 
         ResponseMeasures measures = ResponseConverter.getMeasures(metricsResponse.getBody());
         ResponseIssues issues = ResponseConverter.getIssues(issuesResponse.getBody());
 
         if(measures == null || issues == null)
-            return null;
+            throw new ProjectNotFoundException("unable to find project: " + projectKey + ", unable to convert the response of metrics or issues");
 
         ResultValue codeLines = null, comments = null, duplications = null, bugs = null, codeSmells = null, vulnerabilities = null;
 
@@ -72,7 +74,7 @@ public class SonarqubeService {
         }
 
         if(codeLines == null || comments == null || duplications == null || bugs == null || codeSmells == null || vulnerabilities == null)
-            return null;
+            throw new ProjectNotFoundException("unable to find project: " + projectKey + ", some of the mandatory information are missing");
 
         float numBlocker = 0, numCritical = 0, numMajor = 0, numMinor = 0;
 
